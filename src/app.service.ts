@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ReportType, data } from './data';
 import { v4 as uuid } from 'uuid';
+import { ReportResponseDto } from './dtos/report.dto';
 
 interface Report {
   amount: number;
@@ -13,15 +14,18 @@ interface UpdateReport {
 
 @Injectable()
 export class AppService {
-  getAllReports(type: ReportType) {
+  getAllReports(type: ReportType): ReportResponseDto[] {
     return data.report.filter((report) => report.type === type);
   }
-  getReportById(type: ReportType, id: string) {
+  getReportById(type: ReportType, id: string): ReportResponseDto | undefined {
     return data.report
       .filter((report) => report.type === type)
       .find((report) => report.id === id);
   }
-  createReport(type: ReportType, { amount, source }: Report) {
+  createReport(
+    type: ReportType,
+    { amount, source }: Report,
+  ): ReportResponseDto {
     const newReport = {
       id: uuid(),
       source,
@@ -33,7 +37,11 @@ export class AppService {
     data.report.push(newReport);
     return newReport;
   }
-  updateReport(type: ReportType, body: UpdateReport, id: string) {
+  updateReport(
+    type: ReportType,
+    body: UpdateReport,
+    id: string,
+  ): ReportResponseDto | undefined {
     const reportToUpdate = data.report
       .filter((report) => report.type === type)
       .find((report) => report.id === id);

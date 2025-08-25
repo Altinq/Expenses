@@ -5,6 +5,8 @@ import {
   IsString,
   IsOptional,
 } from 'class-validator';
+import { Exclude, Expose } from 'class-transformer';
+import { ReportType } from 'src/data';
 
 export class CreateReportDto {
   @IsNumber()
@@ -28,4 +30,13 @@ export class UpdateReportDto {
   source: string;
 }
 
-export class ReportResponse {}
+export class ReportResponseDto {
+  id: string;
+  source: string;
+  amount: number;
+  createdAt: Date;
+
+  @Exclude()
+  updatedAt: Date;
+  type: ReportType;
+}
